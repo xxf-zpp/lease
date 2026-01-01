@@ -1,5 +1,6 @@
 package com.atguigu.lease.common.result;
 
+
 import lombok.Data;
 
 /**
