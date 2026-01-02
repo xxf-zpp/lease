@@ -11,8 +11,8 @@ public enum ItemType implements BaseEnum {
     ROOM(2, "房间");
 
 
-    @EnumValue
-    @JsonValue
+    @EnumValue //指定枚举类型中与数据库字段对应的映射值
+    @JsonValue //指定枚举类型序列化时的返回值
     private Integer code;
     private String name;
 
