@@ -4,9 +4,13 @@ package com.atguigu.lease.web.admin.controller.apartment;
 import com.atguigu.lease.common.result.Result;
 import com.atguigu.lease.model.entity.FeeKey;
 import com.atguigu.lease.model.entity.FeeValue;
+import com.atguigu.lease.web.admin.service.FeeKeyService;
+import com.atguigu.lease.web.admin.service.FeeValueService;
 import com.atguigu.lease.web.admin.vo.fee.FeeKeyVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,36 +19,51 @@ import java.util.List;
 @Tag(name = "房间杂费管理")
 @RestController
 @RequestMapping("/admin/fee")
+@RequiredArgsConstructor
 public class FeeController {
 
+    private final FeeKeyService feeKeyService;
+
+    private final FeeValueService feeValueService;
+
     @Operation(summary = "保存或更新杂费名称")
-    @PostMapping("key/saveOrUpdate")
+    @PostMapping("/key/saveOrUpdate")
     public Result saveOrUpdateFeeKey(@RequestBody FeeKey feeKey) {
+        feeKeyService.save(feeKey);
         return Result.ok();
     }
 
     @Operation(summary = "保存或更新杂费值")
-    @PostMapping("value/saveOrUpdate")
+    @PostMapping("/value/saveOrUpdate")
     public Result saveOrUpdateFeeValue(@RequestBody FeeValue feeValue) {
+        feeValueService.save(feeValue);
         return Result.ok();
     }
 
 
     @Operation(summary = "查询全部杂费名称和杂费值列表")
-    @GetMapping("list")
+    @GetMapping("/list")
     public Result<List<FeeKeyVo>> feeInfoList() {
-        return Result.ok();
+        List<FeeKeyVo> list = feeKeyService.listKeyValue();
+        return Result.ok(list);
     }
 
     @Operation(summary = "根据id删除杂费名称")
-    @DeleteMapping("key/deleteById")
+    @DeleteMapping("/key/deleteById")
     public Result deleteFeeKeyById(@RequestParam Long feeKeyId) {
+        //1.删除杂费名称（Key）
+        feeKeyService.removeById(feeKeyId);
+        //2.删除杂费对应的指（Value）
+        LambdaQueryWrapper<FeeValue> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(feeKeyId != null,FeeValue::getFeeKeyId,feeKeyId);
+        feeValueService.remove(queryWrapper);
         return Result.ok();
     }
 
     @Operation(summary = "根据id删除杂费值")
-    @DeleteMapping("value/deleteById")
+    @DeleteMapping("/value/deleteById")
     public Result deleteFeeValueById(@RequestParam Long id) {
+        feeValueService.removeById(id);
         return Result.ok();
     }
 }
