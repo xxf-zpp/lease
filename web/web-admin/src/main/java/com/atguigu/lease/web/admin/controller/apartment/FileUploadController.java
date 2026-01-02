@@ -17,8 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadController {
 
     @Operation(summary = "上传文件")
-    @PostMapping("upload")
-    public Result<String> upload(@RequestParam MultipartFile file) {
+    @PostMapping("/upload")
+    public Result<String> upload(@RequestParam MultipartFile file) { //用于上传文件的专属类
+
         return Result.ok();
     }
 
