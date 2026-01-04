@@ -16,5 +16,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ApartmentInfoService extends IService<ApartmentInfo> {
 
+    /**
+     * 保存或更新公寓信息
+     * @param apartmentSubmitVo
+     */
     void saveOrUpdateApartment(ApartmentSubmitVo apartmentSubmitVo);
+
+    /**
+     * 根据条件分页查询公寓列表
+     * @param page
+     * @param queryVo
+     * @return
+     */
+    IPage<ApartmentItemVo> pageItem(Page<ApartmentItemVo> page, ApartmentQueryVo queryVo);
 }

@@ -16,6 +16,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 */
 public interface ApartmentInfoMapper extends BaseMapper<ApartmentInfo> {
 
+    /**
+     * 根据条件分页查询公寓列表
+     * @param page
+     * @param queryVo
+     * @return
+     */
+    IPage<ApartmentItemVo> pageItem(Page<ApartmentItemVo> page, ApartmentQueryVo queryVo);
 }
 
 

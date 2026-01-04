@@ -4,9 +4,13 @@ import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.model.enums.ItemType;
 import com.atguigu.lease.web.admin.mapper.ApartmentInfoMapper;
 import com.atguigu.lease.web.admin.service.*;
+import com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo;
+import com.atguigu.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentSubmitVo;
 import com.atguigu.lease.web.admin.vo.graph.GraphVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,12 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 
     private final ApartmentFeeValueService apartmentFeeValueService;
 
+    private final ApartmentInfoMapper apartmentInfoMapper;
+
+    /**
+     * 保存或更新公寓信息
+     * @param apartmentSubmitVo
+     */
     @Override
     @Transactional
     public void saveOrUpdateApartment(ApartmentSubmitVo apartmentSubmitVo) {
@@ -117,6 +127,18 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
             apartmentFeeValueService.saveBatch(apartmentFeeValues);
         }
 
+    }
+
+
+    /**
+     * 根据条件分页查询公寓列表
+     * @param page
+     * @param queryVo
+     * @return
+     */
+    @Override
+    public IPage<ApartmentItemVo> pageItem(Page<ApartmentItemVo> page, ApartmentQueryVo queryVo) {
+        return apartmentInfoMapper.pageItem(page,queryVo);
     }
 }
 
